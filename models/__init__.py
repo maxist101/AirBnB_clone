@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 """
-This script initializes a FileStorage instance and reloads data from a JSON file into the storage.
+Create an instance of FileStorage
+Reload data from the JSON file into the storage
 """
 
-from models.engine.file_storage import FileStorage
 
-if __name__ == "__main__":
-    storage = FileStorage()
-    storage.reload()
+from models.engine import file_storage
 
+
+storage = file_storage.FileStorage()
+storage.reload()
