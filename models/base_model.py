@@ -22,11 +22,11 @@ class BaseModel:
                 """ Above, we assigned a unquie identifier, set creation date and update date"""
 
                 if len(kwargs) != 0:
-                for key, value in kwargs.items():
-                if key in ['created_at', 'updated_at']:
-                self._dict_[key] = datetime.strptime(value, DATE_FMT)
+                for k, val in kwargs.items():
+                if k in ['created_at', 'updated_at']:
+                self._dict_[k] = datetime.strptime(val, DATE_FMT)
                 else:
-                self._dict_[key] = value
+                self._dict_[k] = val
                 else:
                 """Code to create new instance in storage"""
                 models.storage.new(self)
