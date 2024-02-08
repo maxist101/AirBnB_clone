@@ -1,50 +1,49 @@
 #!/usr/bin/python3
-"""BaseModel that defines all the common attributes/methods for other classes for the project"""
+"""BaseModel that defines all common attributes/methods for other classes"""
+
 
 import uuid
 from datetime import datetime
 import models
 
-class BaseModel:
-    """A model defining common attributes and methods for other classes.
-        Attributes: Date format used for date string conversion"""
 
-    def _init_(self, *args, **kwargs):
-        """Initializing a new instance of BaseModel
+class BaseModel:
+    """Attributes: Date format used for date string conversion"""
+
+    def __init__(self, *args, **kwargs):
+        """Initializes a new instance of BaseModel
            Args:
             *args (any): Unused.
             **kwargs (dict): Key/value pairs of attributes.
         """
-        DATE_FMT = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid.uuid4()
-                self.created_at = datetime.now()
-                self.updated_at = datetime.now()
-                """ Above, we assigned a unquie identifier, set creation date and update date"""
+        DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
-                if len(kwargs) != 0:
-                for k, val in kwargs.items():
-                if k in ['created_at', 'updated_at']:
-                self._dict_[k] = datetime.strptime(val, DATE_FMT)
+        if len(kwargs) != 0:
+            for key, value in kwargs.items():
+                if key in ['created_at', 'updated_at']:
+                    self.__dict__[key] = datetime.strptime(value, DATE_FORMAT)
                 else:
-                self._dict_[k] = val
-                else:
-                """Code to create new instance in storage"""
-                models.storage.new(self)
+                    self.__dict__[key] = value
+        else:
+            models.storage.new(self)
 
-                def _str_(self):
-                """Fuction to Returns a string representation of the BaseModel instance"""
-                class_nam = self._class.name_
-                return "[{}] ({}) {}".format(class_nam, self.id, self._dict_)
+    def __str__(self):
+        """Returns a string representation of the BaseModel instance"""
+        clname = self.__class__.__name__
+        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
 
-                def save(self):
-                """Updates the update save the instance storeage"""
-                self.updated_at = datetime.today()
-                models.storage.save()
+    def save(self):
+        """Updates the attribute and saves the instance to storage"""
+        self.updated_at = datetime.today()
+        models.storage.save()
 
-                def to_dict(self):
-                """fuction that add class information, formate create date and format update date"""
-                result_dic = self._dict_.copy()
-                result_dic['_class'] = type(self).name_
-                result_dic['created_at'] = self.created_at.isoformat()
-                result_dic['updated_at'] = self.updated_at.isoformat()
-                return result_dic
+    def to_dict(self):
+        """Returns a dictionary representation of the BaseModel instance"""
+        res_dic = self.__dict__.copy()
+        res_dic['__class__'] = type(self).__name__
+        res_dic['created_at'] = self.created_at.isoformat()
+        res_dic['updated_at'] = self.updated_at.isoformat()
+        return res_dic
