@@ -5,12 +5,12 @@ from models.base_model import BaseModel
 
 class FileStorage:
     """
-    This class offers functionalities for serializing instances to a JSON file and deserializing a JSON file back to instances.
+    This class provides methods for serializing instances to a JSON file
+    and deserializing a JSON file to instances.
 
-Attributes:
-
-__file_path (str): The path to the JSON file.
-__objects (dict): A dictionary used to store all objects indexed by <class name>.id.
+    Attributes:
+        __file_path (str): Path to the JSON file.
+        __objects (dict): Dictionary to store all objects by <class name>.id.
     """
     __file_path = "file.json"
     __objects = {}
@@ -18,54 +18,52 @@ __objects (dict): A dictionary used to store all objects indexed by <class name>
     @classmethod
     def _import_all_model_classes(cls):
         """
-        Import model classes dynamically.
+        Dynamically import model classes.
         """
         from models.user import User
-        from models.city import City
         from models.state import State
+        from models.city import City
         from models.place import Place
         from models.amenity import Amenity
         from models.review import Review
 
     def all(self):
         """
-        Returns a dictionary containing all objects.
+        Returns the dictionary of all objects.
 
         Returns:
-
-        dict: A dictionary of all objects.
+            dict: Dictionary of all objects.
         """
         return FileStorage.__objects
 
     def new(self, obj):
         """
-        object to the __objects dictionary.
+        Adds a new object to the __objects dictionary.
 
         Args:
-        the obj (BaseModel): The object to be added.
+            obj (BaseModel): The object to be added.
         """
         ocname = obj.__class__.__name__
         FileStorage.__objects["{}.{}".format(ocname, obj.id)] = obj
 
     def save(self):
         """
-        Serialize the __objects dictionary to the JSON file specified by __file_path.
+        Serializes __objects to the JSON file (__file_path).
         """
-        ob_dict = FileStorage.__objects
-        obdict = {obj: ob_dict[obj].to_dict() for obj in ob_dict.keys()}
+        ser_dict = FileStorage.__objects
+        obj_dict = {obj: ser_dict[obj].to_dict() for obj in ser_dict.keys()}
         with open(FileStorage.__file_path, 'w') as file:
-            json.dump(obdict, file)
+            json.dump(obj_dict, file)
 
     def reload(self):
-        """
-        Deserializes the JSON file into __objects.
-        If the JSON file (__file_path) exists, it loads the data and creates
-        instances of the corresponding classes; otherwise, it takes no action.
+        """Deserializes the JSON file to __objects.
+        If the JSON file (__file_path) exists, loads the data and creates
+        instances of the corresponding classes. Otherwise, does nothing.
         """
         self._import_all_model_classes()
         try:
             with open(FileStorage.__file_path) as file:
-                obdict = json.load(file)
+                obj_dict = json.load(file)
                 for obj_id, obj_data in obj_dict.items():
                     class_name = obj_data["__class__"]
                     del obj_data["__class__"]
