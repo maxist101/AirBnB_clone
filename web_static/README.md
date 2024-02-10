@@ -9,10 +9,8 @@
 
 ## Author
 
-- [Anthony Maxwell]
-- [netochukwu26@gmail.com]
-[Emmanuel Akalazu]
-- [wizzarddguru@gmail.com]
+- [Anthony Maxwell]- [netochukwu26@gmail.com]
+[Emmanuel Akalazu]- [wizzarddguru@gmail.com]
 
 
 ## Background Context
